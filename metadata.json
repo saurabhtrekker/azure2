@@ -1,0 +1,7 @@
+{
+	"itemDisplayName": "PANW Firewall 1.0 template",
+	"description": "This template creates Palo Alto Networks Next-Generation Firewall",
+	"summary": "This template create a PANW NG firewall",
+	"githubUsername": "saurabhtrekker",
+	"dateUpdated": "2016-02-29",
+}
