@@ -1,0 +1,138 @@
+{
+  "handler": "Microsoft.Compute.MultiVm",
+  "version": "0.0.1-preview",
+  "parameters": {
+    "basics": [
+      {
+        "name": "adminUsername",
+        "type": "Microsoft.Compute.UserNameTextBox",
+        "label": "Username",
+        "toolTip": "Admin username for the virtual machines. Same Credientials is to SSH to the box.",
+        "osPlatform": "Linux"
+      },
+      {
+        "name": "SSHCredntials",
+        "type": "Microsoft.Compute.CredentialsCombo",
+        "label": {
+                  "authenticationType": "Authentication type",
+                  "password": "Password",
+                  "confirmPassword": "Confirm password",
+                  "sshPublicKey": "SSH public key"
+                },
+        "toolTip": {
+                "authenticationType": "",
+                "password": "",
+                "sshPublicKey": ""
+              },
+         "constraints": {
+                "required": true
+              },
+         "options": {
+              "hideConfirmation": false
+         },
+         "osPlatform": "Linux"
+       },
+       {
+        "name": "newStorageAccount",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Storage Account Name",
+        "toolTip": "Storage Account Name",
+        "constraints": {
+            "required": true,
+            "regex": "^[a-z0-9](?:[a-z0-9]|(\\-(?!\\-))){8,24}[a-z0-9]$|^\\$root$",
+            "validationMessage": "names must be between 8 and 24 characters long, and can contain numbers, lowercase letters and dash"
+         },
+        "osPlatform": "Linux"
+       },
+       {
+        "name": "ipAddressPrefix",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Source IP address prefix to use for VNET",
+        "toolTip": "Source IP prefix for vnet",
+        "defaultValue": "192.168",
+         "osPlatform": "Linux"
+       },
+       {
+        "name": "srcIPInboundNSG",
+        "type": "Microsoft.Common.TextBox",
+        "label": "NSG InBound source-IP",
+        "toolTip": "NSG InBound source-IP",
+        "defaultValue": "199.167.55.50",
+         "osPlatform": "Linux"
+       },
+       {
+        "name": "vmName",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Name of the PA-VM",
+        "toolTip": "PA-VM Name",
+        "constraints": {
+            "required": true,
+            "regex": "^[a-z0-9](?:[a-z0-9]|(\\-(?!\\-))){8,24}[a-z0-9]$|^\\$root$",
+            "validationMessage": "names must be between 8 and 24 characters long, and can contain numbers, lowercase letters and dash"
+         },
+        "osPlatform": "Linux"
+       },
+       {
+        "name": "dnsNameForPublicIP",
+        "type": "Microsoft.Common.TextBox",
+        "label": "DNS name for public IP of the mgmt interface",
+        "toolTip": "DNS name",
+        "constraints": {
+            "required": true,
+            "regex": "^[a-z0-9](?:[a-z0-9]|(\\-(?!\\-))){8,24}[a-z0-9]$|^\\$root$",
+            "validationMessage": "names must be between 8 and 24 characters long, and can contain numbers, lowercase letters and dash"
+        },
+        "osPlatform": "Linux"
+       }
+    ],
+    "steps": [
+      {
+        "name": "SamplePANVMConfig",
+        "label": "Palo Alto Networks VM config",
+        "subLabel": {
+          "preValidation": "Configure PA-VM",
+          "postValidation": "Done"
+        },
+        "bladeTitle": "Palo Alto Networks VM config",
+        "elements": [
+          {
+            "name": "vmSize",
+            "type": "Microsoft.Compute.SizeSelector",
+            "label": "Virtual machine size",
+            "toolTip": "The size of virtual machine to provision for each cluster node.",
+            "recommendedSizes": [
+              "Standard_D1",
+              "Standard_D2",
+              "Standard_D3",
+              "Standard_D4"
+            ],
+            "constraints": {
+              "allowedSizes": [
+                "Standard_D1",
+                "Standard_D2",
+                "Standard_D3",
+                "Standard_D4"
+              ]
+            },
+            "osPlatform": "Linux",
+            "imageReference": {
+              "publisher": "Canonical",
+              "offer": "UbuntuServer",
+              "sku": "14.04.2-LTS"
+            }
+          }
+        ]
+      }
+    ],
+    "outputs": {
+      "newStorageAccount": "[basics('newStorageAccount')]",
+      "ipAddressPrefix": "[basics('ipAddressPrefix')]",
+      "srcIPInboundNSG": "[basics('srcIPInboundNSG')]",
+      "vmName": "[basics('vmName')]",
+      "dnsNameForPublicIP": "[basics('dnsNameForPublicIP')]",
+      "adminUsername": "[basics('adminUsername')]",
+      "vmSize": "[steps('SamplePANVMConfig').vmSize]",
+      "adminPassword": "[basics('SSHCredntials').password]"
+    }
+  }
+}
